@@ -8,7 +8,7 @@ const app = express();
 const port = 5001;
 
 // usersRouter 를 사용해서 미들웨어 라우팅 설정
-const usersRouter = require('../routes/users');
+const usersRouter = require('./routes/users');
 
 app.use(
   cors({
