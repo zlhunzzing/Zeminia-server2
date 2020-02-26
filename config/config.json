@@ -1,0 +1,11 @@
+{
+  "development": {
+    "username": "zeminia",
+    "password": "12341234",
+    "database": "zeminia",
+    "host": "zeminia.cxbd1sqdz1qm.ap-northeast-2.rds.amazonaws.com",
+    "port": "13306",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
