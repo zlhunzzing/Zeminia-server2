@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { sequelize } = require('./models');
+require('dotenv').config();
 
 const app = express();
 const port = 5001;
@@ -22,11 +23,10 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Todo : dotenv 에 시크릿키 작성하기
-app.use(cookieParser('@cute*cat'));
+app.use(cookieParser(process.env.SECRET_KEY));
 app.use(
   session({
-    secret: '@cute*cat',
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: {
