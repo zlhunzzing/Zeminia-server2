@@ -1,0 +1,7 @@
+.env 로 이름 변경 후 사용해주세요~
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
+DB_HOST=
+SECRET_KEY=
+
