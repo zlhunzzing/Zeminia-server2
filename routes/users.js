@@ -11,4 +11,6 @@ router.post('/signup', usersController.signup.post);
 
 router.post('/signout', usersController.signout.post);
 
+router.delete('/secession', usersController.secession.delete);
+
 module.exports = router;
