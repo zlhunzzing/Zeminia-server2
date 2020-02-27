@@ -3,9 +3,11 @@ const session = require('express-session');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { sequelize } = require('./models');
 
 const app = express();
 const port = 5001;
+sequelize.sync();
 
 // usersRouter 를 사용해서 미들웨어 라우팅 설정
 const usersRouter = require('./routes/users');
