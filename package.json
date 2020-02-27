@@ -1,22 +1,23 @@
 {
-  "name": "backend",
+  "name": "project_zeminia",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "NODE_ENV=production PORT=8001 pm2 start app.js -i 0",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/0strich/BackEnd.git"
+    "url": "git+https://github.com/codestates/Zeminia-server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/0strich/BackEnd/issues"
+    "url": "https://github.com/codestates/Zeminia-server/issues"
   },
-  "homepage": "https://github.com/0strich/BackEnd#readme",
+  "homepage": "https://github.com/codestates/Zeminia-server#readme",
   "dependencies": {
     "bcrypt": "^4.0.0",
     "body-parser": "^1.19.0",
