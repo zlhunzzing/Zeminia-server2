@@ -8,7 +8,7 @@ module.exports = {
       //* need email, password validation check
       // Todo: email, password check
 
-      const user = users.findAll({ where: { email } });
+      const user = await users.findAll({ where: { email } });
       // 유저가 있는 경우
       if (user[0]) {
         const match = await bcrypt.compare(password, user[0].password);
