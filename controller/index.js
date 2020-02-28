@@ -1,5 +1,6 @@
 const usersController = require('./users');
 
 module.exports = {
-  usersController
+  usersController,
+  charactersController: require('./characters')
 };

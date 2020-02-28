@@ -12,6 +12,7 @@ sequelize.sync();
 
 // usersRouter 를 사용해서 미들웨어 라우팅 설정
 const usersRouter = require('./routes/users');
+const charactersRouter = require('./routes/characters');
 
 app.use(
   cors({
@@ -37,6 +38,7 @@ app.use(
 );
 
 app.use('/users', usersRouter);
+app.use('/characters', charactersRouter);
 
 // Todo: 404, 500 error 미들웨어 만들기
 
