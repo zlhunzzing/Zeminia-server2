@@ -1,4 +1,7 @@
+const info = require('./info');
+const rank = require('./rank');
+
 module.exports = {
-  info: require('./info'),
-  rank: require('./rank')
+  info,
+  rank
 };
