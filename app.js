@@ -3,16 +3,34 @@ const session = require('express-session');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { sequelize } = require('./models');
+const fs = require('fs');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const hpp = require('hpp');
+const path = require('path');
+
 require('dotenv').config();
+const { sequelize } = require('./models');
 
-const app = express();
-const port = 5001;
-sequelize.sync();
-
-// usersRouter 를 사용해서 미들웨어 라우팅 설정
+//* routes
 const usersRouter = require('./routes/users');
 const charactersRouter = require('./routes/characters');
+
+const app = express();
+sequelize.sync();
+app.set('port', process.env.PORT || 5001);
+
+if (process.env.NODE_ENV === 'production') {
+  const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    { flags: 'a' }
+  );
+  app.use(morgan('combined', { stream: accessLogStream }));
+  app.use(helmet());
+  app.use(hpp());
+} else {
+  app.use(morgan('dev'));
+}
 
 app.use(
   cors({
@@ -42,7 +60,7 @@ app.use('/characters', charactersRouter);
 
 // Todo: 404, 500 error 미들웨어 만들기
 
-app.listen(port, () => {
+app.listen(app.get('port'), () => {
   // eslint-disable-next-line no-console
-  console.log(`server listen on ${port}`);
+  console.log(`server listen on ${app.get('port')}...`);
 });

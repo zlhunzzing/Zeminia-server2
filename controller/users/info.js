@@ -1,3 +1,4 @@
+// Todo: 실제 디비 연결 후 확인필요~
 const { users } = require('../../models');
 
 module.exports = {
@@ -10,9 +11,7 @@ module.exports = {
       };
       res.json(userData);
     } else {
-      return res.status(401).json({ infoCheck: 'Unauthorized' });
+      res.status(401).json({ infoCheck: 'Unauthorized' });
     }
-
-    return 0;
   }
 };
