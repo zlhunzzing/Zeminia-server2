@@ -43,5 +43,6 @@ app.use('/characters', charactersRouter);
 // Todo: 404, 500 error 미들웨어 만들기
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`server listen on ${port}`);
 });
