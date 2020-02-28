@@ -1,4 +1,3 @@
-// Todo: 실제 디비 연결 후 확인필요~
 const { users } = require('../../models');
 
 module.exports = {
