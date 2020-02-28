@@ -1,12 +1,14 @@
-const { users } = require('../../models');
 const bcrypt = require('bcrypt');
+const { users } = require('../../models');
 
 module.exports = {
   delete: async (req, res, next) => {
     try {
       if (!req.session.userId) {
-        return res.json({ secessionCheck: 'failed' });
+        res.json({ secessionCheck: 'failed' });
+        return;
       }
+
       const { email, password } = req.body;
       const user = await users.findAll({ were: email });
       if (user[0]) {
@@ -25,9 +27,11 @@ module.exports = {
         }
       } else {
         res.json({ secessionCheck: 'failed' });
+        return;
       }
     } catch (err) {
-      console.log('err============', err);
+      // eslint-disable-next-line no-console
+      console.log('err: ', err);
       next();
     }
   }
