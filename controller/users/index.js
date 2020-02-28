@@ -1,7 +1,13 @@
+const info = require('./info');
+const signin = require('./signin');
+const signup = require('./signup');
+const signout = require('./signout');
+const secession = require('./secession');
+
 module.exports = {
-  info: require('./info'),
-  signin: require('./signin'),
-  signup: require('./signup'),
-  signout: require('./signout'),
-  secession: require('./secession')
+  info,
+  signin,
+  signup,
+  signout,
+  secession
 };
