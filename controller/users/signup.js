@@ -32,7 +32,7 @@ module.exports = {
       }
 
       const hash = bcrypt.hashSync(password, 8);
-      const user = await users.findAll({ where: { email: email } });
+      const user = await users.findAll({ where: { email } });
       if (user[0]) {
         res.status(409).json({ failed: '이미 가입된 회원입니다' });
         return;
