@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const path = require('path');
+const MySQLStore = require('express-mysql-session')(session);
 
 require('dotenv').config();
 const { sequelize } = require('./models');
@@ -19,6 +20,15 @@ const charactersRouter = require('./routes/characters');
 const app = express();
 sequelize.sync();
 app.set('port', process.env.PORT || 5001);
+
+const dbOptions = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
+};
+const sessionStore = new MySQLStore(dbOptions);
 
 if (process.env.NODE_ENV === 'production') {
   const accessLogStream = fs.createWriteStream(
@@ -50,8 +60,10 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      secure: false // http
-    }
+      secure: false, // http
+      maxAge: 36000000 // 단위: ms, 현재: 10시간, 참고(3600000 === 1h)
+    },
+    store: sessionStore
   })
 );
 
