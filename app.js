@@ -16,6 +16,7 @@ const { sequelize } = require('./models');
 //* routes
 const usersRouter = require('./routes/users');
 const charactersRouter = require('./routes/characters');
+const monstersRouter = require('./routes/monsters');
 
 const app = express();
 sequelize.sync();
@@ -67,8 +68,10 @@ app.use(
   })
 );
 
+// route middleware
 app.use('/users', usersRouter);
 app.use('/characters', charactersRouter);
+app.use('/monsters', monstersRouter);
 
 // Todo: 404, 500 error 미들웨어 만들기
 
