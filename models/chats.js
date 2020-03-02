@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     'chats',
     {
       character_id: DataTypes.INTEGER,
-      message: DataTypes.STRING
+      message: DataTypes.STRING,
+      roomname: DataTypes.STRING
     },
     {}
   );
