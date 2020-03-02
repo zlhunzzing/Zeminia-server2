@@ -5,12 +5,12 @@ module.exports = {
   delete: async (req, res, next) => {
     try {
       if (!req.session.userId) {
-        res.json({ secessionCheck: 'failed' });
+        res.json({ secessionCheck: 'failed_session' });
         return;
       }
 
       const { email, password } = req.body;
-      const user = await users.findAll({ were: email });
+      const user = await users.findAll({ where: { email } });
       if (user[0]) {
         const match = await bcrypt.compare(password, user[0].password);
         if (match) {
@@ -22,11 +22,11 @@ module.exports = {
           return;
         }
         if (!match) {
-          res.json({ secessionCheck: 'failed' });
+          res.json({ secessionCheck: 'failed_password' });
           return;
         }
       } else {
-        res.json({ secessionCheck: 'failed' });
+        res.json({ secessionCheck: 'failed_user' });
         return;
       }
     } catch (err) {
