@@ -9,7 +9,7 @@ module.exports = {
       if (user) {
         const match = await bcrypt.compare(password, user.password);
         if (match) {
-          await users.destroy({ where: { id: req.session.userId } });
+          await users.destroy({ where: { email } });
           req.session.destroy();
           res.json({
             secessionCheck: 'success'
