@@ -4,15 +4,10 @@ const { users } = require('../../models');
 module.exports = {
   delete: async (req, res, next) => {
     try {
-      if (!req.session.userId) {
-        res.json({ secessionCheck: 'failed_session' });
-        return;
-      }
-
       const { email, password } = req.body;
-      const user = await users.findAll({ where: { email } });
-      if (user[0]) {
-        const match = await bcrypt.compare(password, user[0].password);
+      const user = await users.findOne({ where: { email } });
+      if (user) {
+        const match = await bcrypt.compare(password, user.password);
         if (match) {
           await users.destroy({ where: { id: req.session.userId } });
           req.session.destroy();
