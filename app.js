@@ -31,6 +31,20 @@ const dbOptions = {
 };
 const sessionStore = new MySQLStore(dbOptions);
 
+const sessionMiddleware = session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    secure: false, // http
+    maxAge: 36000000 // 단위: ms, 현재: 10시간, 참고(3600000 === 1h)
+  },
+  store: sessionStore
+});
+
+const WebSocket = require('./socket');
+
 if (process.env.NODE_ENV === 'production') {
   const accessLogStream = fs.createWriteStream(
     path.join(__dirname, 'access.log'),
@@ -54,19 +68,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.SECRET_KEY));
-app.use(
-  session({
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      httpOnly: true,
-      secure: false, // http
-      maxAge: 36000000 // 단위: ms, 현재: 10시간, 참고(3600000 === 1h)
-    },
-    store: sessionStore
-  })
-);
+app.use(sessionMiddleware);
 
 // route middleware
 app.use('/users', usersRouter);
@@ -75,7 +77,9 @@ app.use('/monsters', monstersRouter);
 
 // Todo: 404, 500 error 미들웨어 만들기
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
   // eslint-disable-next-line no-console
   console.log(`server listen on ${app.get('port')}...`);
 });
+
+WebSocket(server, sessionMiddleware);
