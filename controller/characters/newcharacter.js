@@ -19,7 +19,7 @@ module.exports = {
         // res.status(200).send(newCharacter.dataVales);
         res.status(200).send(sendData.dataValues);
       } else {
-        res.status(404).send({ failed: '인증되지 않은 사용자 입니다.' });
+        res.status(401).send({ failed: '인증되지 않은 사용자 입니다.' });
       }
       // 새로운 캐릭터 생성후, response
     } catch (err) {
