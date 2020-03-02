@@ -13,7 +13,7 @@ module.exports = {
         } else {
           res
             .status(404)
-            .send((noneCharacter: '해당 계정 캐릭터가 존재하지 않습니다'));
+            .send({ noneCharacter: '해당 계정 캐릭터가 존재하지 않습니다' });
         }
       } else {
         // 세션아이디 없음. 불가능한 접근
