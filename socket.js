@@ -1,5 +1,5 @@
 const SocketIO = require('socket.io');
-const { Character, Chat } = require('./models');
+const { characters, chats } = require('./models');
 
 module.exports = (server, sessionMiddleware) => {
   const io = SocketIO(server, { path: '/socket.io' });
@@ -23,6 +23,38 @@ module.exports = (server, sessionMiddleware) => {
 
     socket.on('error', err => {
       console.error(err);
+    });
+
+    socket.on('sendMessage', async data => {
+      if (!req.session.userId) {
+        socket.emit('notSession', { info: '세션 정보가 없습니다' });
+        return;
+      }
+
+      if (data.roomname === '' || data.message === '') {
+        socket.emit('emptyData', { info: '값을 넣어서 전달해 주세요' });
+        return;
+      }
+
+      console.log('message: ', data);
+
+      const character = await characters.findAll({
+        where: { user_id: req.session.userId }
+      });
+
+      // 캐릭터가 있는 경우
+      if (character[0]) {
+        await chats.create({
+          roomname: data.roomname,
+          message: data.message,
+          character_id: character[0].id
+        });
+        socket.emit('messageSuccess', { info: 'message success~' });
+      }
+      // 캐릭터가 없는 경우
+      else {
+        socket.emit('notCharacter', { info: '캐릭터가 없습니다' });
+      }
     });
   });
 };
