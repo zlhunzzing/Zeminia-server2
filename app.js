@@ -59,7 +59,10 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'http://zeminia-client.s3-website.ap-northeast-2.amazonaws.com'
+    ],
     methods: 'GET, POST, DELETE, PATCH, OPTIONS',
     credentials: true
   })
