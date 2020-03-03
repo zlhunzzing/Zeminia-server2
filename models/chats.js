@@ -1,4 +1,5 @@
 'use strict';
+const models = require('../models');
 module.exports = (sequelize, DataTypes) => {
   const chats = sequelize.define(
     'chats',
@@ -11,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
   );
   chats.associate = function(models) {
     // associations can be defined here
+    models.chats.belongsTo(models.characters, {
+      foreignKey: 'character_id'
+    });
   };
   return chats;
 };
