@@ -25,12 +25,26 @@ const filterRoom = async roomname => {
     where: { roomname }
   });
 
+  // 콘솔로 찍어보면 characters 를 사용하려면 character 로 해야 한다.
+  // row.characters 로 하면 값을 찾지를 못한다, character. 으로 찾아야 한다.
+  // 왜 그런 지 알 수 없다...
+  // console.log('getChats...', getChats);
+  // dataValues: {
+  //   id: 3,
+  //   character_id: 1,
+  //   message: 'gggg',
+  //   roomname: 'seoul',
+  //   createdAt: 2020-03-03T04:48:11.000Z,
+  //   updatedAt: 2020-03-03T04:48:11.000Z,
+  //   character: [characters]
+  // },
+
   const result = getChats.map(row => {
     return {
       id: row.id,
       message: row.message,
       roomname: row.roomname,
-      character: row.Character.name,
+      character: row.character.character_name,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt
     };
@@ -67,6 +81,13 @@ module.exports = (server, sessionMiddleware) => {
     socket.on('uniqRoomInit', () => {
       uniqRoomFilter().then(rooms => {
         socket.emit('uniqRoomInit', rooms);
+      });
+    });
+
+    socket.on('filterRoom', roomname => {
+      console.log(roomname);
+      filterRoom(roomname).then(row => {
+        socket.emit('filterRoom', row);
       });
     });
 
