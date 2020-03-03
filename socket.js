@@ -1,6 +1,44 @@
 const SocketIO = require('socket.io');
 const { characters, chats } = require('./models');
 
+// select options 에 넣을 방 이름들 (중복 제거)
+// ['seoul', 'busan', 'seoul', 'busan']  -> ['busan', 'seoul']
+const uniqRoomFilter = async () => {
+  // https://stackoverflow.com/questions/41519695/how-to-get-a-distinct-value-of-a-row-with-sequelize
+  // [{DISTINCT: 'default', DISTINCT: 'seoul', ...}]
+  const distinctRooms = await chats.aggregate('roomname', 'DISTINCT', {
+    plain: false
+  });
+
+  // ['default', 'seoul', ...]
+  const getRoooms = distinctRooms.map(room => {
+    return room.DISTINCT;
+  });
+
+  return getRoooms;
+};
+
+// 'seoul' 에 해당하는 방의 데이터 가져오기
+const filterRoom = async roomname => {
+  const getChats = await chats.findAll({
+    include: [characters],
+    where: { roomname }
+  });
+
+  const result = getChats.map(row => {
+    return {
+      id: row.id,
+      message: row.message,
+      roomname: row.roomname,
+      character: row.Character.name,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt
+    };
+  });
+
+  return result;
+};
+
 module.exports = (server, sessionMiddleware) => {
   const io = SocketIO(server, { path: '/socket.io' });
 
@@ -25,6 +63,13 @@ module.exports = (server, sessionMiddleware) => {
       console.error(err);
     });
 
+    // select options에 넣을 중복없는 방 이름 전달하기
+    socket.on('uniqRoomInit', () => {
+      uniqRoomFilter().then(rooms => {
+        socket.emit('uniqRoomInit', rooms);
+      });
+    });
+
     socket.on('sendMessage', async data => {
       if (!req.session.userId) {
         socket.emit('notSession', { info: '세션 정보가 없습니다' });
@@ -45,8 +90,8 @@ module.exports = (server, sessionMiddleware) => {
       // 캐릭터가 있는 경우
       if (character[0]) {
         await chats.create({
-          roomname: data.roomname,
-          message: data.message,
+          roomname: data.roomname.trim(),
+          message: data.message.trim(),
           character_id: character[0].id
         });
         socket.emit('messageSuccess', { info: 'message success~' });
