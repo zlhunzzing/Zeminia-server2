@@ -4,17 +4,12 @@ const { users } = require('../../models');
 module.exports = {
   delete: async (req, res, next) => {
     try {
-      if (!req.session.userId) {
-        res.json({ secessionCheck: 'failed' });
-        return;
-      }
-
       const { email, password } = req.body;
-      const user = await users.findAll({ were: email });
-      if (user[0]) {
-        const match = await bcrypt.compare(password, user[0].password);
+      const user = await users.findOne({ where: { email } });
+      if (user) {
+        const match = await bcrypt.compare(password, user.password);
         if (match) {
-          await users.destroy({ where: { id: req.session.userId } });
+          await users.destroy({ where: { email } });
           req.session.destroy();
           res.json({
             secessionCheck: 'success'
@@ -22,11 +17,11 @@ module.exports = {
           return;
         }
         if (!match) {
-          res.json({ secessionCheck: 'failed' });
+          res.json({ secessionCheck: 'failed_password' });
           return;
         }
       } else {
-        res.json({ secessionCheck: 'failed' });
+        res.json({ secessionCheck: 'failed_user' });
         return;
       }
     } catch (err) {
