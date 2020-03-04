@@ -104,6 +104,9 @@ module.exports = (server, sessionMiddleware) => {
 
       console.log('message: ', data);
 
+      // 방에 접속
+      socket.join(data.roomname);
+
       const character = await characters.findAll({
         where: { user_id: req.session.userId }
       });
@@ -116,6 +119,16 @@ module.exports = (server, sessionMiddleware) => {
           character_id: character[0].id
         });
         socket.emit('messageSuccess', { info: 'message success~' });
+
+        uniqRoomFilter().then(rooms => {
+          socket.emit('uniqRooms', rooms);
+          socket.broadcast.emit('uniqRooms', rooms);
+        });
+
+        filterRoom(data.roomname).then(row => {
+          socket.emit('filterRoom', row);
+          socket.to(data.roomname).emit('filterRoom', row);
+        });
       }
       // 캐릭터가 없는 경우
       else {
