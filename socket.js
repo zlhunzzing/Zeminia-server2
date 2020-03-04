@@ -60,7 +60,7 @@ module.exports = (server, sessionMiddleware) => {
     sessionMiddleware(socket.request, socket.request.res, next);
   });
 
-  io.on('connection', socket => {
+  io.on('connection', async socket => {
     console.log('클라인트에서 소켓을 접속하였습니다: ', socket.id);
     const req = socket.request;
     if (!req.session.userId) {
@@ -78,17 +78,12 @@ module.exports = (server, sessionMiddleware) => {
     });
 
     // select options에 넣을 중복없는 방 이름 전달하기
-    socket.on('uniqRoomInit', () => {
-      uniqRoomFilter().then(rooms => {
-        socket.emit('uniqRoomInit', rooms);
-      });
+    socket.on('uniqRoomInit', async () => {
+      socket.emit('uniqRoomInit', await uniqRoomFilter());
     });
 
-    socket.on('filterRoom', roomname => {
-      console.log(roomname);
-      filterRoom(roomname).then(row => {
-        socket.emit('filterRoom', row);
-      });
+    socket.on('filterRoom', async roomname => {
+      socket.emit('filterRoom', await filterRoom(roomname));
     });
 
     socket.on('sendMessage', async data => {
