@@ -20,10 +20,18 @@ const uniqRoomFilter = async () => {
 
 // 'seoul' 에 해당하는 방의 데이터 가져오기
 const filterRoom = async roomname => {
-  const getChats = await chats.findAll({
-    include: [characters],
-    where: { roomname }
-  });
+  let getChats = null;
+
+  if (roomname) {
+    getChats = await chats.findAll({
+      include: [{ model: characters }],
+      where: { roomname }
+    });
+  } else {
+    getChats = await chats.findAll({
+      include: [{ model: characters }]
+    });
+  }
 
   // 콘솔로 찍어보면 characters 를 사용하려면 character 로 해야 한다.
   // row.characters 로 하면 값을 찾지를 못한다, character. 으로 찾아야 한다.
@@ -80,6 +88,10 @@ module.exports = (server, sessionMiddleware) => {
     // select options에 넣을 중복없는 방 이름 전달하기
     socket.on('uniqRoomInit', async () => {
       socket.emit('uniqRoomInit', await uniqRoomFilter());
+    });
+
+    socket.on('allMessages', async () => {
+      socket.emit('allMessages', await filterRoom());
     });
 
     socket.on('filterRoom', async roomname => {
