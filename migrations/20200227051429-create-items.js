@@ -17,6 +17,9 @@ module.exports = {
       def: {
         type: Sequelize.INTEGER
       },
+      cost: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
