@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       item: DataTypes.STRING,
       att: DataTypes.INTEGER,
-      def: DataTypes.INTEGER
+      def: DataTypes.INTEGER,
+      cost: DataTypes.INTEGER
     },
     {}
   );
