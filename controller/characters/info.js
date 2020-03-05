@@ -5,7 +5,8 @@ module.exports = {
     try {
       if (req.session.userId) {
         const info = await characters.findAll({
-          include: [{ model: items }]
+          include: [{ model: items }],
+          where: { user_id: req.session.userId }
         });
 
         console.log(info[0]);
