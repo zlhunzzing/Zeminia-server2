@@ -42,7 +42,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       weapon: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       login_time: {
         type: Sequelize.DATE
