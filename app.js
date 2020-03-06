@@ -17,6 +17,8 @@ const { sequelize } = require('./models');
 const usersRouter = require('./routes/users');
 const charactersRouter = require('./routes/characters');
 const monstersRouter = require('./routes/monsters');
+const itemsRouter = require('./routes/items');
+const logger = require('./logger');
 
 const app = express();
 sequelize.sync();
@@ -67,6 +69,10 @@ app.use(
     credentials: true
   })
 );
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/image', express.static(path.join(__dirname, 'uploads')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -77,8 +83,28 @@ app.use(sessionMiddleware);
 app.use('/users', usersRouter);
 app.use('/characters', charactersRouter);
 app.use('/monsters', monstersRouter);
+app.use('/items', itemsRouter);
 
-// Todo: 404, 500 error 미들웨어 만들기
+// winston test
+// app.get('/logger', (req, res, next) => {
+//   logger.error('error~~ test');
+//   next();
+// });
+
+app.use((req, res, next) => {
+  const err = new Error('404 NOT FOUND');
+  err.status = 404;
+  logger.info('404 err');
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  logger.error(err.message);
+
+  const message = req.app.get('env') === 'development' ? 'error~' : 'sorry';
+  res.send(message);
+});
 
 const server = app.listen(app.get('port'), () => {
   // eslint-disable-next-line no-console

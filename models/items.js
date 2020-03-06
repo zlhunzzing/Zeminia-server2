@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       item: DataTypes.STRING,
       att: DataTypes.INTEGER,
-      def: DataTypes.INTEGER
+      def: DataTypes.INTEGER,
+      cost: DataTypes.INTEGER
     },
     {}
   );
@@ -14,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     models.items.hasMany(models.monsters_items, {
       foreignKey: 'item_id'
+    });
+  };
+  items.associate = function(models) {
+    models.items.hasMany(models.characters, {
+      foreignKey: 'weapon'
     });
   };
   return items;

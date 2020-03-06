@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       hp: DataTypes.INTEGER,
       att: DataTypes.INTEGER,
       exp: DataTypes.INTEGER,
-      drop: DataTypes.STRING
+      drop: DataTypes.STRING,
+      img: DataTypes.STRING
     },
     {}
   );

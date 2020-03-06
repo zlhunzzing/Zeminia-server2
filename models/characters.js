@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       rankScore: DataTypes.INTEGER,
       gold: DataTypes.INTEGER,
       mp: DataTypes.INTEGER,
-      weapon: DataTypes.STRING,
+      weapon: DataTypes.INTEGER,
       login_time: DataTypes.DATE,
       logout_time: DataTypes.DATE
     },
@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     models.characters.hasMany(models.chats, {
       foreignKey: 'character_id'
+    });
+  };
+  characters.associate = function(models) {
+    models.characters.belongsTo(models.items, {
+      foreignKey: 'weapon'
     });
   };
   return characters;

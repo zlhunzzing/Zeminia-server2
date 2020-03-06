@@ -1,12 +1,15 @@
-const { characters } = require('../../models');
+const { characters, items } = require('../../models');
 
 module.exports = {
   get: async (req, res, next) => {
     try {
       if (req.session.userId) {
         const info = await characters.findAll({
+          include: [{ model: items }],
           where: { user_id: req.session.userId }
         });
+
+        console.log(info[0]);
 
         if (info[0]) {
           res.status(200).send(info[0].dataValues);
