@@ -29,9 +29,10 @@ express, sequelize, AWS EC2
 19. winston-daily-rotate-file
 
 ## MVC Design Pattern
-
+![mvcPattern](./images/mvcPattern.png)
 
 ## Database Schema
-
+![mysqlSchema](./images/mysqlSchema.png)
 
 ## API Docs
+![apiDocs](./images/apiDocs.png)
