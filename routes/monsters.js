@@ -6,12 +6,14 @@ const router = express.Router();
 
 const { monstersController } = require('../controller');
 
+console.log(monstersController);
+
 const upload = multer({
   storage: multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination(req, file, cb) {
       cb(null, 'uploads/');
     },
-    filename: function(req, file, cb) {
+    filename(req, file, cb) {
       cb(null, new Date().valueOf() + path.extname(file.originalname));
     },
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB
