@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { charactersController } = require('../controller');
 
-router.get('/info', charactersController.info.get);
+router.get('/info:id', charactersController.info.get);
 
 router.get('/rank', charactersController.rank.get);
 

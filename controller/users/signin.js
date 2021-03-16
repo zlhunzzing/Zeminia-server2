@@ -15,7 +15,8 @@ module.exports = {
           req.session.userId = user[0].id;
           req.session.userSess = req.session.id;
           res.json({
-            signinCheck: 'success'
+            signinCheck: 'success',
+            userId: user[0].id
           });
           return;
         }

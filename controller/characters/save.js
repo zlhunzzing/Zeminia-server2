@@ -2,8 +2,9 @@ const { characters } = require('../../models');
 
 module.exports = {
   post: async (req, res, next) => {
+    console.log(req.body);
     try {
-      if (req.session.userId) {
+      if (req.body) {
         const {
           level,
           maxHp,
